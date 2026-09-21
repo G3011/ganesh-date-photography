@@ -1,11 +1,99 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-  <title>Ganesh Date Photography</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ganesh Date Photography</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff1eb,#e8f8ff,#fffbd1);color:#222}
+header{padding:70px 20px;text-align:center;color:white;background:linear-gradient(135deg,#ff512f,#dd2476,#7b2ff7)}
+header h1{font-size:clamp(30px,7vw,55px);margin:0 0 12px}
+header p{font-size:18px}
+nav{text-align:center;padding:16px;background:white;box-shadow:0 2px 10px #0002;position:sticky;top:0;z-index:5}
+nav a{color:#dd2476;margin:0 10px;text-decoration:none;font-weight:bold}
+section{max-width:1100px;margin:auto;padding:55px 20px}
+h2{text-align:center;color:#7b2ff7;margin-bottom:25px}
+.about{text-align:center;font-size:18px;line-height:1.7}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.gallery img{width:100%;height:240px;object-fit:cover;border-radius:18px;box-shadow:0 5px 15px #0003}
+.upload-box{background:white;padding:25px;border-radius:20px;text-align:center;box-shadow:0 5px 18px #0002}
+input{margin:15px}
+button{background:linear-gradient(135deg,#ff512f,#7b2ff7);color:white;border:0;padding:12px 22px;border-radius:25px;cursor:pointer;font-weight:bold}
+footer{text-align:center;padding:25px;color:white;background:#37106d}
+</style>
 </head>
-<body style="background:linear-gradient(135deg,#ff512f,#dd2476);color:white;text-align:center;padding:100px;font-family:Arial">
-  <h1>Ganesh Date Photography</h1>
-  <p>Website successfully live hai!</p>
+<body>
+<header>
+<h1>Ganesh Date Photography</h1>
+<p>Capturing colorful moments, memories and emotions</p>
+</header>
+
+<nav>
+<a href="#about">About</a>
+<a href="#gallery">Gallery</a>
+<a href="#upload">Upload</a>
+</nav>
+
+<section id="about">
+<h2>About My Photography</h2>
+<p class="about">Welcome to Ganesh Date Photography. Explore beautiful moments, creative portraits, celebrations and memorable experiences.</p>
+</section>
+
+<section id="gallery">
+<h2>My Photo Gallery</h2>
+<div class="gallery" id="galleryBox"><p>No photos uploaded yet.</p></div>
+</section>
+
+<section id="upload">
+<h2>Owner Photo Upload</h2>
+<div class="upload-box">
+<p>Yahan se aap apni photos add kar sakte hain.</p>
+<input type="file" id="photoInput" accept="image/*" multiple>
+<br>
+<button onclick="uploadPhotos()">Add Photos</button>
+</div>
+</section>
+
+<footer>© 2026 Ganesh Date Photography</footer>
+
+<script>
+const galleryBox=document.getElementById("galleryBox");
+const photoInput=document.getElementById("photoInput");
+
+function loadPhotos(){
+const photos=JSON.parse(localStorage.getItem("ganeshPhotos")||"[]");
+galleryBox.innerHTML="";
+if(!photos.length){galleryBox.innerHTML="<p>No photos uploaded yet.</p>";return}
+photos.forEach(photo=>{
+const img=document.createElement("img");
+img.src=photo;
+galleryBox.appendChild(img);
+});
+}
+
+function uploadPhotos(){
+const files=Array.from(photoInput.files);
+if(!files.length){alert("Please select a photo.");return}
+const oldPhotos=JSON.parse(localStorage.getItem("ganeshPhotos")||"[]");
+let completed=0;
+files.forEach(file=>{
+const reader=new FileReader();
+reader.onload=e=>{
+oldPhotos.push(e.target.result);
+completed++;
+if(completed===files.length){
+localStorage.setItem("ganeshPhotos",JSON.stringify(oldPhotos));
+photoInput.value="";
+loadPhotos();
+alert("Photos added successfully!");
+}
+};
+reader.readAsDataURL(file);
+});
+}
+loadPhotos();
+</script>
 </body>
 </html>
+
